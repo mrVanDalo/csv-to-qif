@@ -3,16 +3,16 @@
 --   http://haskell.org/cabal/release/cabal-latest/doc/users-guide/
 
 name: to-qif
-version: 1.0.0.2
+version: 0.1
 license: BSD3
 license-file: LICENSE
-copyright: (c) Simon Marlow
-author: Simon Marlow
-maintainer: Simon Marlow <marlowsd@gmail.com>
-bug-reports: mailto:marlowsd@gmail.com
-stability: stable
-homepage: http://www.haskell.org/hello/
-synopsis: Hello World, an example package
+copyright: (c) Ingolf Wagner
+author: Ingolf Wagner
+maintainer: Ingolf Wagner <palipalo9@googlemail.com>
+bug-reports: mailto:palipalo9@gmail.com
+stability: unstable
+homepage: http://www.haskell.org/
+synopsis: A small program that will read csv files and create qif files
 category: Console, Text
 cabal-version: >= 1.6
 build-type: Simple
