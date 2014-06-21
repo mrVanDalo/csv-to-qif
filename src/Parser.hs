@@ -26,6 +26,7 @@ type Column = String
 
 type ParseError = String
 
+-- | parse csv file to read transactions from it
 parseCSVFromFile :: String -> Char -> IO (Either ParseError CSV)
 parseCSVFromFile file separator = do
     content <- readFile file

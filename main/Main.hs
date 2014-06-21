@@ -51,6 +51,11 @@ main = do
             exitFailure
         Right csv  -> do
             putStrLn $ show csv
+            let toTransform = drop (optSkip opts) csv
+                actions = toTransactions rules toTransform
+                qif = transToQif actions
+            mapM_ putStrLn qif
+
 
     putStrLn $ show rules
     putStrLn $ show opts
