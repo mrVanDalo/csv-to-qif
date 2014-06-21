@@ -4,7 +4,7 @@ transform a wide range of csv files to qif files, with the main target to import
 
 # Usage
 
-You have to give `csv-to-qif` a lot of parameters, so its best to create a bash script for every type of csv your bank will give you.
+You have to give `csv-to-qif` a lot of parameters, so it's best to create a bash script for every type of csv your bank will give you.
 
     #!/bin/bash
     
