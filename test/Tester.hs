@@ -30,3 +30,7 @@ main = hspec $ do
         let trans = (Transaction "heute" "short" "long bla bla" "100$")
             qif   = ["Pshort","T100$","Dheute","Mlong bla bla"]
         (toQif trans) `shouldBe` qif
+    it "should generate Qif File content" $ do
+        let trans = (Transaction "heute" "short" "long bla bla" "100$")
+            qif   = ["!Type:Bank","Pshort","T100$","Dheute","Mlong bla bla","^"]
+        (transToQif [trans]) `shouldBe` qif
