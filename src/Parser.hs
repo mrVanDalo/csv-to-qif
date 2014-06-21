@@ -19,10 +19,9 @@ module Parser where
 import Data.Spreadsheet
 import Control.Monad.Exception.Asynchronous.Lazy(Exceptional(..))
 import Data.List
+import Qifer
 
-type CSV = [Row]
-type Row = [Column]
-type Column = String
+
 
 type ParseError = String
 

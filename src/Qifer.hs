@@ -16,6 +16,10 @@ module Qifer where
 
 import Data.List
 
+type CSV = [Row]
+type Row = [Column]
+type Column = String
+
 data Transaction = Transaction { date :: String
                                 , description :: String
                                 , text :: String

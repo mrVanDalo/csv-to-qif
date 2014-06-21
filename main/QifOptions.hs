@@ -111,7 +111,7 @@ options =
     , Option "V" ["version"]
         (NoArg
             (\_ -> do
-                hPutStrLn stderr "Version 0.01"
+                hPutStrLn stderr "Version 0.2"
                 exitWith ExitSuccess))
         "Print version"
 

@@ -42,25 +42,24 @@ main = do
                 , optOutput   = output   } = opts
 
     checkArguments opts
-
     let rules = rule opts
+
     parseResult <- parseCSVFromFile (optInput opts) (optSeparator opts)
     case parseResult of
         Left error -> do
             hPutStrLn stderr $ error
             exitFailure
         Right csv  -> do
-            putStrLn $ show csv
+            -- putStrLn $ show csv
             let toTransform = drop (optSkip opts) csv
                 actions = toTransactions rules toTransform
                 qif = transToQif actions
-            putStrLn $ show csv
+            -- putStrLn $ show csv
             withFile (optOutput opts) WriteMode (\h ->
                 mapM_ ( hPutStrLn h) qif)
 
-
-    putStrLn $ show rules
-    putStrLn $ show opts
+    --putStrLn $ show rules
+    --putStrLn $ show opts
 
 -- | this function is unsafe call it after checkArguments
 -- @todo : make me safer
