@@ -25,8 +25,8 @@ type Column = String
 
 type ParseError = String
 
-parseCSVFromFile :: String -> IO (Either ParseError CSV)
-parseCSVFromFile file = do
+parseCSVFromFile :: String -> String -> IO (Either ParseError CSV)
+parseCSVFromFile file separator = do
     foo <- Text.CSV.parseCSVFromFile file
     case foo of
         Right csv  -> return $ Right csv
