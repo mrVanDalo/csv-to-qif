@@ -80,7 +80,7 @@ update :: [(String,String)] -> [Transaction] -> [Transaction]
 update _ []         = []
 update regex (t:ts) = (updateSingle regex t) : (update regex ts)
     where
-        updateSingle [] r = r
+        updateSingle [] r                                 = r
         updateSingle ((rgx,replacement):rest) transaction =
             if updatedTrans == transaction
             then

@@ -34,7 +34,8 @@ type ParseError = String
 parseCSVFromFile :: Int -> String -> Char -> IO (Either ParseError CSV)
 parseCSVFromFile skip file separator = do
     firstContent <- readFile file
-    let content = concat . intersperse "\n" . drop skip . lines $ firstContent
+    let content           = unlines . separatorAtEndFix . drop skip . lines $ firstContent
+        separatorAtEndFix = map (\l -> l ++ " ")
     case (fromString '\n' separator content) of
         Exceptional (Just s) result -> do
             hPutStrLn stderr s
@@ -45,3 +46,4 @@ strip :: CSV -> CSV
 strip = map (\line -> map (\word -> stripWord word) line)
     where   stripWord     = dropWhile dontNeed . dropWhileEnd dontNeed
             dontNeed c    = (c == '"') || (isSpace c)
+
