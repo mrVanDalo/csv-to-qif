@@ -1,5 +1,5 @@
 name: csv-to-qif
-version: 0.3
+version: 0.4
 cabal-version: >=1.10
 build-type: Simple
 license: BSD3
@@ -18,7 +18,7 @@ data-dir: ""
 
 source-repository head
     type: git
-    location: https://github.com/mrVanDalo/csv-to-qif
+    location: git@github.com:mrVanDalo/csv-to-qif.git
 
 flag threaded
     Default: False
