@@ -48,8 +48,8 @@ startOptions = Options  { optVerbose    = False
                         , optSeparator  = ','
                         }
 
-instance Show (a -> b) where
-    show _ = "<function>"
+--instance Show (a -> b) where
+--    show _ = "<function>"
 
 instance Show (IO a) where
     show _ = "<IoString>"
