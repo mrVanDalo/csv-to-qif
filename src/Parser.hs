@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 -----------------------------------------------------------------------------
 --
 -- Module      :  Parser
@@ -15,8 +16,8 @@
 
 module Parser where
 
-
-import qualified Text.CSV
+import Data.Spreadsheet
+import Control.Monad.Exception.Asynchronous.Lazy(Exceptional(..))
 
 
 type CSV = [Row]
@@ -25,12 +26,9 @@ type Column = String
 
 type ParseError = String
 
-parseCSVFromFile :: String -> String -> IO (Either ParseError CSV)
+parseCSVFromFile :: String -> Char -> IO (Either ParseError CSV)
 parseCSVFromFile file separator = do
-    foo <- Text.CSV.parseCSVFromFile file
-    case foo of
-        Right csv  -> return $ Right csv
-        Left error -> return $ Left $ show error
-
-
-
+    content <- readFile file
+    case (fromString '"' separator content) of
+        Exceptional (Just s) _ -> return $ Left s
+        Exceptional Nothing result -> return $ Right result
