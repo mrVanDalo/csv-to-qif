@@ -18,7 +18,7 @@ module Parser where
 
 import Data.Spreadsheet
 import Control.Monad.Exception.Asynchronous.Lazy(Exceptional(..))
-
+import Data.List
 
 type CSV = [Row]
 type Row = [Column]
@@ -30,6 +30,11 @@ type ParseError = String
 parseCSVFromFile :: String -> Char -> IO (Either ParseError CSV)
 parseCSVFromFile file separator = do
     content <- readFile file
-    case (fromString '"' separator content) of
-        Exceptional (Just s) _ -> return $ Left s
-        Exceptional Nothing result -> return $ Right result
+    case (fromString '\n' separator content) of
+        Exceptional (Just s) result -> return $ Right $ strip result
+        Exceptional Nothing result -> return $ Right $ strip result
+
+strip :: CSV -> CSV
+strip = map (\line -> map (\word -> stripWord word) line)
+    where   stripWord = dropWhile dontNeed . dropWhileEnd dontNeed
+            dontNeed c = c == '"'
