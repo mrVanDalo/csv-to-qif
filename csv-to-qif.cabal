@@ -1,13 +1,13 @@
-name: to-qif
-version: 0.2
+name: csv-to-qif
+version: 0.4
 cabal-version: >=1.10
 build-type: Simple
 license: BSD3
 license-file: LICENSE
 copyright: (c) Ingolf Wagner
 maintainer: Ingolf Wagner <palipalo9@googlemail.com>
-stability: unstable
-homepage: http://www.haskell.org/
+stability: stable
+homepage: https://github.com/mrVanDalo/csv-to-qif/
 bug-reports: mailto:palipalo9@gmail.com
 synopsis: A small program that will read csv files and create qif files
 description: Binary to convert a wide range of csv files to qif files.
@@ -18,7 +18,7 @@ data-dir: ""
 
 source-repository head
     type: git
-    location: https://bitbucket.org/PaloVanDalo/to-qif
+    location: git@github.com:mrVanDalo/csv-to-qif.git
 
 flag threaded
     Default: False
