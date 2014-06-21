@@ -39,7 +39,21 @@ main = do
                 , optOutput   = output   } = opts
 
     checkArguments opts
+
+    let rules = rule opts
+
+    putStrLn $ show rules
     putStrLn $ show opts
+
+-- | this function is unsafe call it after checkArguments
+-- @todo : make me safer
+rule :: Options -> Rule
+rule opts = Rule {
+    dateField = fromJust $ optDate opts
+    , balanceField = fromJust $ optBalance opts
+    , textField = optLongText opts
+    , descField = optText opts
+    }
 
 -- | checks input arguments for minimum of configuration
 checkArguments :: Options -> IO ()

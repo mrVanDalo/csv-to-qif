@@ -111,10 +111,19 @@ options =
         (NoArg
             (\_ -> do
                 prg <- getProgName
-                hPutStrLn stderr (usageInfo prg options)
+                hPutStrLn stderr (usageInfo (useage prg) options)
                 exitWith ExitSuccess))
         "Show help"
     ]
+
+useage :: String -> String
+useage prog = prog ++ "\n\n" ++
+    "author : Ingolf Wagner\n\n" ++
+    header ++ "\n\n" ++
+    information ++ "\n\n"
+    where   header      = "Converting CSV files to Qif Files"
+            information = "all column numbers start at 0!"
+
 
 readColumn :: String -> Maybe Int
 readColumn input = readMaybe input
