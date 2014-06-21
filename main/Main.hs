@@ -45,15 +45,14 @@ main = do
     checkArguments opts
     let rules = rule opts
 
-    parseResult <- parseCSVFromFile (optInput opts) (optSeparator opts)
+    parseResult <- parseCSVFromFile (optSkip opts) (optInput opts) (optSeparator opts)
     case parseResult of
         Left error -> do
             hPutStrLn stderr $ error
             exitFailure
         Right csv  -> do
 
-            let toTransform = drop (optSkip opts) csv
-                actions     = toTransactions rules toTransform
+            let actions     = toTransactions rules csv
 
             updatedActions  <- case (optUpdater opts) of
                     Nothing   ->
