@@ -14,7 +14,7 @@
 
 module Qifer where
 
-import Text.CSV
+import Data.List
 
 data Transaction = Transaction { date :: String
                                 , description :: String
@@ -39,7 +39,7 @@ toTransactions rule (c:sv) =
                   (pick balanceField)
                  ) : (toTransactions rule sv ))
     where pick n = (c !! (n rule))
-          pock n = concat . map (\k -> c !! k ) $ (n rule)
+          pock n = concat . intersperse " " . map (\k -> c !! k ) $ (n rule)
 
 qifHeader :: String
 qifHeader = "!Type:Bank"
