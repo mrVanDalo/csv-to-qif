@@ -27,7 +27,7 @@ import Data.Maybe
 
 data Options = Options  { optVerbose    :: Bool
                         , optInput      :: String
-                        , optOutput     :: String -> IO ()
+                        , optOutput     :: String
                         , optDate       :: Maybe Int
                         , optBalance    :: Maybe Int
                         , optText       :: [Int]
@@ -39,7 +39,7 @@ data Options = Options  { optVerbose    :: Bool
 startOptions :: Options
 startOptions = Options  { optVerbose    = False
                         , optInput      = ""
-                        , optOutput     = putStr
+                        , optOutput     = ""
                         , optDate       = Nothing
                         , optBalance    = Nothing
                         , optText       = []
@@ -65,7 +65,7 @@ options =
 
     , Option "o" ["output"]
         (ReqArg
-            (\arg opt -> return opt { optOutput = writeFile arg })
+            (\arg opt -> return opt { optOutput = arg })
             "FILE")
         "Output file (Qif Format)"
 

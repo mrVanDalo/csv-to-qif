@@ -54,7 +54,8 @@ main = do
             let toTransform = drop (optSkip opts) csv
                 actions = toTransactions rules toTransform
                 qif = transToQif actions
-            mapM_ putStrLn qif
+            withFile (optOutput opts) WriteMode (\h ->
+                mapM_ ( hPutStrLn h) qif)
 
 
     putStrLn $ show rules
