@@ -20,7 +20,7 @@ data Transaction = Transaction { date :: String
                                 , description :: String
                                 , text :: String
                                 , balance :: String
-                               }
+                               } deriving (Eq,Show)
 
 type Position = Int
 
@@ -28,7 +28,7 @@ data Rule = Rule { dateField :: Position
                    , descField :: [Position]
                    , textField :: [Position]
                    , balanceField :: Position
-                 }
+                 } deriving (Show)
 
 toTransactions :: Rule -> CSV -> [Transaction]
 toTransactions _ [] = []
