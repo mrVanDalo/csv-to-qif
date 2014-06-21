@@ -1,1 +1,1 @@
-Version1 [Task1 "empty lines should be skipped" [],Task1 "automatisches parsen der texte\n\neine datei mit regex zu text noch erstellen, damit man \nangeben kann welche strings mit was ersetzt werden sollen" []] []
+Version1 [Task1 "updater soll parameter aus der regex \252bertragen\n\nDAK 123123123 Zahlung (\\d{2}\\.\\d{4})<->Dak Krankenkasse \\1\n\nsoll zu \nDak Krankenkasse 12.2015\nwerden" []] []
