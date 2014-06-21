@@ -26,24 +26,26 @@ import Data.Maybe
 
 
 data Options = Options  { optVerbose    :: Bool
-                        , optInput      :: IO String
-                        , optOutput     :: String -> IO ()
+                        , optInput      :: String
+                        , optOutput     :: String
                         , optDate       :: Maybe Int
                         , optBalance    :: Maybe Int
                         , optText       :: [Int]
                         , optLongText   :: [Int]
                         , optSkip       :: Int
+                        , optSeparator  :: Char
                         } deriving (Show)
 
 startOptions :: Options
 startOptions = Options  { optVerbose    = False
-                        , optInput      = getContents
-                        , optOutput     = putStr
+                        , optInput      = ""
+                        , optOutput     = ""
                         , optDate       = Nothing
                         , optBalance    = Nothing
                         , optText       = []
                         , optLongText   = []
                         , optSkip       = 0
+                        , optSeparator  = ','
                         }
 
 instance Show (a -> b) where
@@ -57,15 +59,21 @@ options :: [ OptDescr (Options -> IO Options) ]
 options =
     [ Option "i" ["input"]
         (ReqArg
-            (\arg opt -> return opt { optInput = readFile arg })
+            (\arg opt -> return opt { optInput = arg })
             "FILE")
         "Input file (CSV Format)"
 
     , Option "o" ["output"]
         (ReqArg
-            (\arg opt -> return opt { optOutput = writeFile arg })
+            (\arg opt -> return opt { optOutput = arg })
             "FILE")
         "Output file (Qif Format)"
+
+    , Option "z" ["separator"]
+        (ReqArg
+            (\arg opt -> return opt { optSeparator = head arg })
+            "char")
+        "separator of the csv file"
 
     , Option "d" ["date"]
         (ReqArg
@@ -111,10 +119,19 @@ options =
         (NoArg
             (\_ -> do
                 prg <- getProgName
-                hPutStrLn stderr (usageInfo prg options)
+                hPutStrLn stderr (usageInfo (useage prg) options)
                 exitWith ExitSuccess))
         "Show help"
     ]
+
+useage :: String -> String
+useage prog = prog ++ "\n\n" ++
+    "author : Ingolf Wagner\n\n" ++
+    header ++ "\n\n" ++
+    information ++ "\n\n"
+    where   header      = "Converting CSV files to Qif Files"
+            information = "all column numbers start at 0!"
+
 
 readColumn :: String -> Maybe Int
 readColumn input = readMaybe input
