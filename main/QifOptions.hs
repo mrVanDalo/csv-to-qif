@@ -26,7 +26,7 @@ import Data.Maybe
 
 
 data Options = Options  { optVerbose    :: Bool
-                        , optInput      :: IO String
+                        , optInput      :: String
                         , optOutput     :: String -> IO ()
                         , optDate       :: Maybe Int
                         , optBalance    :: Maybe Int
@@ -37,7 +37,7 @@ data Options = Options  { optVerbose    :: Bool
 
 startOptions :: Options
 startOptions = Options  { optVerbose    = False
-                        , optInput      = getContents
+                        , optInput      = ""
                         , optOutput     = putStr
                         , optDate       = Nothing
                         , optBalance    = Nothing
@@ -57,7 +57,7 @@ options :: [ OptDescr (Options -> IO Options) ]
 options =
     [ Option "i" ["input"]
         (ReqArg
-            (\arg opt -> return opt { optInput = readFile arg })
+            (\arg opt -> return opt { optInput = arg })
             "FILE")
         "Input file (CSV Format)"
 

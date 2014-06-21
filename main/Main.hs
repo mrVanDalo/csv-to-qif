@@ -16,11 +16,14 @@ module Main (main) where
 
 import QifOptions
 import Qifer
+import Parser
+
 import System.Environment
 import System.Console.GetOpt
 import System.IO
 import Data.Maybe
 import System.Exit
+
 
 
 
@@ -41,6 +44,13 @@ main = do
     checkArguments opts
 
     let rules = rule opts
+    parseResult <- parseCSVFromFile (optInput opts)
+    case parseResult of
+        Left error -> do
+            hPutStrLn stderr $ error
+            exitFailure
+        Right csv  -> do
+            putStrLn $ show csv
 
     putStrLn $ show rules
     putStrLn $ show opts
@@ -71,6 +81,7 @@ checkArguments opts = do
                 , (check optBalance "need balance column")
                 , (checkL optText "need text columns")
                 , (checkL optLongText "need long text columns")
+                , (checkL optInput "need input file")
                 ]
         check getter text = case (getter opts) of
                                 Nothing -> Just text
