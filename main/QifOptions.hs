@@ -34,6 +34,7 @@ data Options = Options  { optVerbose    :: Bool
                         , optLongText   :: [Int]
                         , optSkip       :: Int
                         , optSeparator  :: Char
+                        , optUpdater    :: Maybe String
                         } deriving (Show)
 
 startOptions :: Options
@@ -46,6 +47,7 @@ startOptions = Options  { optVerbose    = False
                         , optLongText   = []
                         , optSkip       = 0
                         , optSeparator  = ','
+                        , optUpdater    = Nothing
                         }
 
 --instance Show (a -> b) where
@@ -69,6 +71,11 @@ options =
             "FILE")
         "Output file (Qif Format)"
 
+    , Option "u" ["updater"]
+        (ReqArg
+            (\arg opt -> return opt { optUpdater = Just arg })
+            "FILE")
+        "Updater file format is `match`<->`replacement`"
     , Option "z" ["separator"]
         (ReqArg
             (\arg opt -> return opt { optSeparator = head arg })

@@ -17,6 +17,7 @@ module Main (main) where
 import QifOptions
 import Qifer
 import Parser
+import Data.List.Split
 
 import System.Environment
 import System.Console.GetOpt
@@ -52,14 +53,26 @@ main = do
         Right csv  -> do
             -- putStrLn $ show csv
             let toTransform = drop (optSkip opts) csv
-                actions = toTransactions rules toTransform
-                qif = transToQif actions
+                actions     = toTransactions rules toTransform
+                qif         = transToQif actions
             -- putStrLn $ show csv
             withFile (optOutput opts) WriteMode (\h ->
                 mapM_ ( hPutStrLn h) qif)
-
     --putStrLn $ show rules
     --putStrLn $ show opts
+
+-- | reads updater file
+readUpdaterFile :: String -> IO [(String,String)]
+readUpdaterFile fileName = do
+    content <- readFile fileName
+    return $ tupler . onlyTuple . splitter . lines $ content
+    where
+        tupler    = map (\(x:(y:[])) -> (x,y))
+        onlyTuple = filter (\l -> length l == 2)
+        splitter  = map (\l -> splitOn "<->" l)
+
+
+
 
 -- | this function is unsafe call it after checkArguments
 -- @todo : make me safer
