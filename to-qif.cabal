@@ -17,34 +17,33 @@ description: This is an implementation of the classic "Hello World" program in
 category: Console, Text
 author: Ingolf Wagner
 data-dir: ""
-
+ 
 source-repository head
     type: darcs
     location: http://darcs.haskell.org/hello/
-
+ 
 flag threaded
     Default: False
-
+ 
 executable to-qif
     build-depends: base >=4.2 && <5, csv >=0.1.1
-
+     
     if flag(threaded)
         buildable: True
         ghc-options: -threaded
     main-is: hello.hs
     buildable: True
-    hs-source-dirs: src,main
-    other-modules: Main Qifer
-    default-language:    Haskell2010
-
+    default-language: Haskell2010
+    hs-source-dirs: src main
+    other-modules: Main Opt Qifer
+ 
 test-suite tester
-    build-depends: base >=4.2 && <5, csv >=0.1.1, Cabal >= 1.9.2
+    build-depends: base >=4.2 && <5, csv >=0.1.1, Cabal >=1.9.2,
+                   base >=4.2 && <5, csv >=0.1.1, Cabal >=1.9.2, hspec >=1.8
+    type: exitcode-stdio-1.0
     main-is: Tester.hs
     buildable: True
-    hs-source-dirs: src,test
+    default-language: Haskell2010
+    default-extensions: OverloadedStrings
+    hs-source-dirs: src test
     ghc-options: -Wall
-    default-extensions:  OverloadedStrings
-    type: exitcode-stdio-1.0
-    build-depends:       base >=4.2 && <5, csv >=0.1.1, Cabal >= 1.9.2,
-                          hspec >= 1.8
-    default-language:    Haskell2010

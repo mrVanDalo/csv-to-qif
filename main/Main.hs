@@ -14,13 +14,7 @@
 
 module Main (main) where
 
-
-
-import System.Console.GetOpt
-import System
-import Control.Monad
-import IO
-import List
-import Char
+import QifOptions
+import Qifer
 
 
