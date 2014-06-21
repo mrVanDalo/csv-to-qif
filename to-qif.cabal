@@ -1,39 +1,44 @@
--- Instructions on how to write this file are in the Cabal
--- documentation, which can be found here:
---   http://haskell.org/cabal/release/cabal-latest/doc/users-guide/
-
 name: to-qif
 version: 0.1
+cabal-version: >=1.9.2
+build-type: Simple
 license: BSD3
 license-file: LICENSE
 copyright: (c) Ingolf Wagner
-author: Ingolf Wagner
 maintainer: Ingolf Wagner <palipalo9@googlemail.com>
-bug-reports: mailto:palipalo9@gmail.com
 stability: unstable
 homepage: http://www.haskell.org/
+bug-reports: mailto:palipalo9@gmail.com
 synopsis: A small program that will read csv files and create qif files
+description: This is an implementation of the classic "Hello World" program in
+             Haskell, as an example of how to create a minimal Haskell
+             application using Cabal and Hackage.  Please submit any suggestions and
+             improvements.
 category: Console, Text
-cabal-version: >= 1.6
-build-type: Simple
-
-Description:
-  This is an implementation of the classic "Hello World" program in
-  Haskell, as an example of how to create a minimal Haskell
-  application using Cabal and Hackage.  Please submit any suggestions and
-  improvements.
+author: Ingolf Wagner
+data-dir: ""
 
 source-repository head
-  type:     darcs
-  location: http://darcs.haskell.org/hello/
+    type: darcs
+    location: http://darcs.haskell.org/hello/
 
 flag threaded
-  default: False
+    Default: False
 
 executable to-qif
-  hs-source-dirs: src
-  main-is: hello.hs
-  build-depends: base >= 4.2 && < 5
+    build-depends: base >=4.2 && <5, csv >=0.1.1
 
-  if flag(threaded)
-     ghc-options: -threaded
+    if flag(threaded)
+        buildable: True
+        ghc-options: -threaded
+    main-is: hello.hs
+    buildable: True
+    hs-source-dirs: src
+    other-modules: Main Qifer
+
+test-suite tester
+    build-depends: base >=4.2 && <5, csv >=0.1.1, Cabal >= 1.9.2
+    type: detailed-0.9
+    test-module: Tester
+    buildable: True
+    hs-source-dirs: src
