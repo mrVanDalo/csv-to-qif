@@ -33,6 +33,7 @@ data Options = Options  { optVerbose    :: Bool
                         , optText       :: [Int]
                         , optLongText   :: [Int]
                         , optSkip       :: Int
+                        , optSeparator  :: Char
                         } deriving (Show)
 
 startOptions :: Options
@@ -44,6 +45,7 @@ startOptions = Options  { optVerbose    = False
                         , optText       = []
                         , optLongText   = []
                         , optSkip       = 0
+                        , optSeparator  = ','
                         }
 
 instance Show (a -> b) where
@@ -66,6 +68,12 @@ options =
             (\arg opt -> return opt { optOutput = writeFile arg })
             "FILE")
         "Output file (Qif Format)"
+
+    , Option "z" ["separator"]
+        (ReqArg
+            (\arg opt -> return opt { optSeparator = head arg })
+            "char")
+        "separator of the csv file"
 
     , Option "d" ["date"]
         (ReqArg
