@@ -26,3 +26,7 @@ main = hspec $ do
             trans= (Transaction "2" "3" "14" "5")
             csv  = [["1","2","3","4","5"]]
         (toTransactions rule csv) `shouldBe` [trans]
+    it "should generate Qif" $ do
+        let trans = (Transaction "heute" "short" "long bla bla" "100$")
+            qif   = ["Pshort","T100$","Dheute","Mlong bla bla"]
+        (toQif trans) `shouldBe` qif

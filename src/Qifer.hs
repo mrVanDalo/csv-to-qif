@@ -41,5 +41,18 @@ toTransactions rule (c:sv) =
     where pick n = (c !! (n rule))
           pock n = concat . map (\k -> c !! k ) $ (n rule)
 
+qifHeader :: String
+qifHeader = "!Type:Bank"
 
+toQif :: Transaction -> [String]
+toQif trans = ["P" ++ d, "T" ++ money, "D" ++ time, "M" ++ msg]
+    where   d     = (description trans)
+            money = (balance trans)
+            time  = (date trans)
+            msg   = (text trans)
+
+transToQif :: [Transaction] -> [String]
+transToQif trans = qifHeader : (foo trans)
+    where   foo []     = []
+            foo (t:ts) = (toQif t) ++ ["^"] ++ (foo ts)
 
