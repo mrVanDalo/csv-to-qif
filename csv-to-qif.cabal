@@ -23,7 +23,7 @@ source-repository head
 flag threaded
     Default: False
 
-executable to-qif
+executable csv-to-qif
     build-depends: base >=4.2 && <5, split >=0.2.2, regex-tdfa >= 1.2.0,
                    spreadsheet >= 0.1.3, explicit-exception >= 0.1.7
 
