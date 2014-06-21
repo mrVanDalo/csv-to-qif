@@ -1,6 +1,6 @@
 # CSV To Qif
 
-transform a wide range of csv files to qif files, with the main target to import them into (GnuCash)[http://www.gnucash.org/].
+transform a wide range of csv files to qif files, with the main target to import them into [GnuCash](http://www.gnucash.org/).
 
 # Usage
 
@@ -16,7 +16,9 @@ You have to give `csv-to-qif` a lot of parameters, so its best to create a bash 
     
     iconv -t UTF-8 -f ISO-8859-15 $FILE > $NEW_FILE
     
-    csv-to-qif --input=$NEW_FILE --output=$OUTPUT --date=0 --text=3,4 --longtext=3,4,5 --balance=7 --skip=$SKIP --separator=';' --updater=$CONFIG
+    csv-to-qif --input=$NEW_FILE --output=$OUTPUT \
+        --date=0 --text=3,4 --longtext=3,4,5 --balance=7 \
+        --skip=$SKIP --separator=';' --updater=$CONFIG
     
     head -n $SKIP $FILE
 
