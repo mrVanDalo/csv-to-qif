@@ -32,6 +32,7 @@ data Options = Options  { optVerbose    :: Bool
                         , optBalance    :: Maybe Int
                         , optText       :: [Int]
                         , optLongText   :: [Int]
+                        , optSkip       :: Int
                         } deriving (Show)
 
 startOptions :: Options
@@ -42,6 +43,7 @@ startOptions = Options  { optVerbose    = False
                         , optBalance    = Nothing
                         , optText       = []
                         , optLongText   = []
+                        , optSkip       = 0
                         }
 
 instance Show (a -> b) where
@@ -57,34 +59,42 @@ options =
         (ReqArg
             (\arg opt -> return opt { optInput = readFile arg })
             "FILE")
-        "Input file CSV"
+        "Input file (CSV Format)"
 
     , Option "o" ["output"]
         (ReqArg
             (\arg opt -> return opt { optOutput = writeFile arg })
             "FILE")
-        "Output file Qif"
+        "Output file (Qif Format)"
 
     , Option "d" ["date"]
         (ReqArg
             (\arg opt -> return opt { optDate = readColumn arg})
             "<column number>")
-        "Number of Date Column"
+        "Date Column"
     , Option "b" ["balance"]
         (ReqArg
             (\arg opt -> return opt { optBalance = readColumn arg})
             "<column number>")
-        "Number of Balance Column"
+        "Balance Column"
     , Option "t" ["text"]
         (ReqArg
             (\arg opt -> return opt { optText = readColumns arg})
             "<column numbers>")
-        "Number of Text Columns"
-    , Option "l" ["ltext"]
+        "Text Columns"
+    , Option "l" ["longtext"]
         (ReqArg
             (\arg opt -> return opt { optLongText = readColumns arg})
             "<column numbers>")
-        "Number of long Text Columns"
+        "Long Text Columns"
+    , Option "s" ["skip"]
+        (ReqArg
+            (\arg opt -> case (readColumn arg) of
+                Nothing -> return opt
+                Just r  -> return opt { optSkip = r} )
+            "<number of rows>")
+        "Rows to Skip before reading"
+
     , Option "v" ["verbose"]
         (NoArg
             (\opt -> return opt { optVerbose = True }))

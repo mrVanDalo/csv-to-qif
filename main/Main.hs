@@ -25,7 +25,7 @@ import System.Exit
 
 
 
-
+-- | the famous main method
 main = do
     args <- getArgs
 
@@ -41,7 +41,7 @@ main = do
     checkArguments opts
     putStrLn $ show opts
 
-
+-- | checks input arguments for minimum of configuration
 checkArguments :: Options -> IO ()
 checkArguments opts = do
     case errors of
