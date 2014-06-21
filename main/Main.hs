@@ -18,6 +18,10 @@ import QifOptions
 import Qifer
 import System.Environment
 import System.Console.GetOpt
+import System.IO
+import Data.Maybe
+import System.Exit
+
 
 
 
@@ -31,9 +35,36 @@ main = do
     -- Here we thread startOptions through all supplied option actions
     opts <- foldl (>>=) (return startOptions) actions
 
-    let Options { optVerbose = verbose
-                , optInput = input
-                , optOutput = output   } = opts
+    let Options { optInput    = input
+                , optOutput   = output   } = opts
 
+    checkArguments opts
     putStrLn $ show opts
+
+
+checkArguments :: Options -> IO ()
+checkArguments opts = do
+    case errors of
+        [] ->
+            return ()
+        _  -> do
+            mapM_ putStrLn  errors
+            exitFailure
+            return ()
+    where
+        errors = catMaybes list
+        list =  [ (check optDate "need date column")
+                , (check optBalance "need balance column")
+                , (checkL optText "need text columns")
+                , (checkL optLongText "need long text columns")
+                ]
+        check getter text = case (getter opts) of
+                                Nothing -> Just text
+                                Just _  -> Nothing
+        checkL getter text = case (getter opts) of
+                                []      -> Just text
+                                _       -> Nothing
+
+
+
 
