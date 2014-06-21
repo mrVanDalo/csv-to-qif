@@ -35,16 +35,23 @@ data Rule = Rule { dateField :: Position
                    , balanceField :: Position
                  } deriving (Show)
 
+highestPosition :: Rule -> Position
+highestPosition (Rule dF tF ltF bF) =
+    maximum . concat $ [[dF],tF,ltF,[bF]]
+
 toTransactions :: Rule -> CSV -> [Transaction]
-toTransactions _ [] = []
-toTransactions rule (c:sv) =
-    ((Transaction (pick dateField)
+toTransactions _ []        = []
+toTransactions rule (c:sv)
+    | (highestPosition rule) > (length c)  =
+        toTransactions rule sv
+    | otherwise                            =
+        ((Transaction (pick dateField)
                   (pock descField)
                   (pock textField)
                   (pick balanceField)
-                 ) : (toTransactions rule sv ))
-    where pick n = (c !! (n rule))
-          pock n = concat . intersperse " " . map (\k -> c !! k ) $ (n rule)
+                 ) : (toTransactions rule sv))
+        where pick n = (c !! (n rule))
+              pock n = concat . intersperse " " . map (\k -> c !! k ) $ (n rule)
 
 qifHeader :: String
 qifHeader = "!Type:Bank"
