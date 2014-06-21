@@ -16,6 +16,7 @@
 
 module Parser where
 
+import Data.Char
 import Data.Spreadsheet
 import Control.Monad.Exception.Asynchronous.Lazy(Exceptional(..))
 import Data.List
@@ -35,5 +36,5 @@ parseCSVFromFile file separator = do
 
 strip :: CSV -> CSV
 strip = map (\line -> map (\word -> stripWord word) line)
-    where   stripWord = dropWhile dontNeed . dropWhileEnd dontNeed
-            dontNeed c = c == '"'
+    where   stripWord     = dropWhile dontNeed . dropWhileEnd dontNeed
+            dontNeed c    = (c == '"') || (isSpace c)
