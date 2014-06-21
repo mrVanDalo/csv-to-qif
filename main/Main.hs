@@ -51,15 +51,22 @@ main = do
             hPutStrLn stderr $ error
             exitFailure
         Right csv  -> do
-            -- putStrLn $ show csv
+
             let toTransform = drop (optSkip opts) csv
                 actions     = toTransactions rules toTransform
-                qif         = transToQif actions
-            -- putStrLn $ show csv
+
+            updatedActions  <- case (optUpdater opts) of
+                    Nothing   ->
+                        return $ actions
+                    Just file -> do
+                        updaterConfig <- readUpdaterFile file
+                        return $ update updaterConfig actions
+
+            let qif = transToQif updatedActions
+
             withFile (optOutput opts) WriteMode (\h ->
                 mapM_ ( hPutStrLn h) qif)
-    --putStrLn $ show rules
-    --putStrLn $ show opts
+
 
 -- | reads updater file
 readUpdaterFile :: String -> IO [(String,String)]
