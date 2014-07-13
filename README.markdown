@@ -40,7 +40,7 @@ You have to give `csv-to-qif` a lot of parameters, so it's best to create a bash
 
 ### updater Parameter
 
-Because some banks create descriptions that are `to detailed`.
+Because some banks create descriptions that are _to detailed_.
 You can create a updater configuration that will match for Strings and replaces the description (not the long description) with a replacement.
 The format is `match`<->`replacement`
 
