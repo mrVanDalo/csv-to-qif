@@ -7,7 +7,7 @@ license-file: LICENSE
 copyright: (c) Ingolf Wagner
 maintainer: Ingolf Wagner <palipalo9@googlemail.com>
 stability: stable
-homepage: https://github.com/mrVanDalo/csv-to-qif/
+homepage: http://mrvandalo.github.io/csv-to-qif/
 bug-reports: mailto:palipalo9@gmail.com
 synopsis: A small program that will read csv files and create qif files
 description: Binary to convert a wide range of csv files to qif files.
