@@ -27,6 +27,8 @@ data Transaction = Transaction { date :: String
                                 , balance :: String
                                } deriving (Eq,Show)
 
+balance_map f x = x{balance = f $ balance x}
+
 type Position = Int
 
 data Rule = Rule { dateField :: Position
@@ -52,8 +54,8 @@ toTransactions rule (c:sv)
                                     (pock textField)
                                     (pick balanceField))
 
-qifHeader :: String
-qifHeader = "!Type:Bank"
+qifHeader :: String -> String
+qifHeader typeinfo = "!Type:" ++ typeinfo
 
 toQif :: Transaction -> [String]
 toQif trans = ["P" ++ d, "T" ++ money, "D" ++ time, "M" ++ msg]
@@ -62,8 +64,8 @@ toQif trans = ["P" ++ d, "T" ++ money, "D" ++ time, "M" ++ msg]
             time  = (date trans)
             msg   = (text trans)
 
-transToQif :: [Transaction] -> [String]
-transToQif trans = qifHeader : (foo trans)
+transToQif :: String -> [Transaction] -> [String]
+transToQif typeinfo trans = (qifHeader typeinfo) : (foo trans)
     where   foo []     = []
             foo (t:ts) = (toQif t) ++ ["^"] ++ (foo ts)
 
