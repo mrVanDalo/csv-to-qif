@@ -14,34 +14,35 @@
 
 module QifParser where
 
-import Qifer 
+import QifData
 import Text.ParserCombinators.Parsec
 
 newline_skip = do _ <- newline
                   return ()
 newline_or_eof = choice [newline_skip, eof]
 
+data TransactionField = D String | P String | M String | T String
 
-date_parser :: GenParser Char st String
+date_parser :: GenParser Char st TransactionField
 date_parser = do _ <- string "D"
                  date <- manyTill (noneOf ['\n','\r']) (newline_or_eof)
-                 return date
+                 return $ D date
 
 
-description_parser :: GenParser Char st String
+description_parser :: GenParser Char st TransactionField
 description_parser = do _ <- string "P"
                         description <- manyTill (noneOf ['\n','\r']) newline_or_eof
-                        return description
+                        return $ P description
 
-text_parser :: GenParser Char st String
+text_parser :: GenParser Char st TransactionField
 text_parser = do _ <- string "M"
                  text <- manyTill (noneOf ['\n','\r']) newline_or_eof
-                 return text
+                 return $ M text
 
-balance_parser :: GenParser Char st String
+balance_parser :: GenParser Char st TransactionField
 balance_parser = do _ <- string "T"
                     balance <- manyTill (noneOf ['\n','\r']) newline_or_eof
-                    return balance
+                    return $ T balance
 
 
 type_parser :: GenParser Char st String
@@ -50,34 +51,38 @@ type_parser = do _ <- string "!Type:"
                  return typeinfo
 
 transaction_parser :: GenParser Char st Transaction
-transaction_parser = do date <- date_parser
-                        description <- description_parser
-                        text <- option "" text_parser
-                        balance <- balance_parser
-                        return $ Transaction { date = date,
-                                               description = description,
-                                               text = text,
-                                               balance = balance
-                                             }
+transaction_parser = do fields <- manyTill (choice [date_parser, description_parser, text_parser, balance_parser]) (try $ lookAhead $ seperator_parser)
+                        return $ foldl fieldToTransaction 
+                                       Transaction { date = "", description = "", text = "", balance = "" }
+                                       fields
+              where fieldToTransaction trans (D date) = trans{ date = date }
+                    fieldToTransaction trans (P desc) = trans{ description = desc }
+                    fieldToTransaction trans (M text) = trans{ text = text }
+                    fieldToTransaction trans (T bal)  = trans{ balance = bal }
+
+seperator_parser :: GenParser Char st ()
+seperator_parser = do  _ <- string "^" 
+                       _ <- newline_or_eof
+                       return ()
+
 
 transactions_parser :: GenParser Char st [Transaction]
-transactions_parser = sepEndBy transaction_parser seperator
-    where seperator = do  _ <- string "^" 
-                          _ <- newline_or_eof
-                          return ()
+transactions_parser = sepEndBy transaction_parser seperator_parser
 
-qif_file_parser :: GenParser Char st (String, [Transaction])
+qif_file_parser :: GenParser Char st Qif
 qif_file_parser = do typeinfo     <- type_parser
                      transactions <- transactions_parser
-                     return (typeinfo, transactions)
+                     return Qif{typeinfo = typeinfo, transactions = transactions }
+
+test_parser p s = parse p "(unknown)" s
+
+
 
 parse_qif_file filename = do contents <- readFile filename
-                             return $ fromRight (qifHeader "Bank",[]) $ parse qif_file_parser "(unknown)" contents
+                             return $ fromRight (Qif{typeinfo = "Bank", transactions = []}) $ parse qif_file_parser "(unknown)" contents
 
 fromRight d (Right x) = x
 fromRight d _         = d
-
-test_parser p s = parse p "(unknown)" s
 
 
 
