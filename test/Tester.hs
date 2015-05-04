@@ -16,7 +16,13 @@ module Main (main) where
 
 
 import Test.Hspec
+import Test.QuickCheck
+import Data.Char(isPrint)
+
 import Qifer
+import QifData
+import QifParser
+
 
 main :: IO ()
 main = hspec $ do
@@ -47,5 +53,27 @@ main = hspec $ do
             regex        = [("story","found story"),("balla","found balla")]
             transactions = [transA,transB]
         (update regex transactions) `shouldBe` [transA1,transB1]
+    it "taking a qif, printing it as a string, and parsing it should result in the original qif" $
+      do property $ forAll qif $ \qif -> (qifFromString $ qifToString qif) == qif
 
 
+
+transaction :: Gen Transaction
+transaction = do
+   i <- choose(0,20)
+   j <- choose(0,20)
+   k <- choose(0,20)
+   m <- choose(0,20)
+   date        <- suchThat (vector i) isText
+   description <- suchThat (vector j) isText
+   text        <- suchThat (vector k) isText
+   balance     <- suchThat (vector m) isText
+   return Transaction{ date = date, description = description, text = text, balance = balance }
+
+qif :: Gen Qif
+qif = do i    <- choose(0,20)
+         typeinfo  <- suchThat (vector i) isText
+         transactions <- listOf transaction
+         return Qif{ typeinfo = typeinfo, transactions = transactions }
+
+isText = all isPrint
