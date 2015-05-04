@@ -89,10 +89,13 @@ qif_file_parser = do typeinfo     <- type_parser
                      transactions <- transactions_parser
                      return Qif{typeinfo = typeinfo, transactions = transactions }
 
+-- | obtain qif from string
+qifFromString s = fromRight (Qif{typeinfo = "Bank", transactions = []}) $ parse qif_file_parser "(unknown)" s
+
 -- | IO Monad helper function: reads and parses qif file
 -- * if parsing successful returns qif data structure, otherwise returns "empty" qif
 parse_qif_file filename = do contents <- readFile filename
-                             return $ fromRight (Qif{typeinfo = "Bank", transactions = []}) $ parse qif_file_parser "(unknown)" contents
+                             return $ qifFromString contents
 
 
 {- **************************************************

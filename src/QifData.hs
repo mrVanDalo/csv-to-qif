@@ -16,7 +16,9 @@
 module QifData where
 
 data Qif = Qif{ typeinfo :: String, transactions :: [Transaction]}
-    deriving Eq
+    deriving (Eq, Show)
+
+ 
 
 typeinfoToString :: String -> String
 typeinfoToString typeinfo = "!Type:" ++ typeinfo
