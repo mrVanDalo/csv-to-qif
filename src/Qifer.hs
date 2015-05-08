@@ -16,16 +16,13 @@ module Qifer where
 
 import Data.List
 import Text.Regex.TDFA
+import QifData
+
 
 type CSV = [Row]
 type Row = [Column]
 type Column = String
 
-data Transaction = Transaction { date :: String
-                                , description :: String
-                                , text :: String
-                                , balance :: String
-                               } deriving (Eq,Show)
 
 type Position = Int
 
@@ -52,20 +49,10 @@ toTransactions rule (c:sv)
                                     (pock textField)
                                     (pick balanceField))
 
-qifHeader :: String
-qifHeader = "!Type:Bank"
-
-toQif :: Transaction -> [String]
-toQif trans = ["P" ++ d, "T" ++ money, "D" ++ time, "M" ++ msg]
-    where   d     = (description trans)
-            money = (balance trans)
-            time  = (date trans)
-            msg   = (text trans)
 
 transToQif :: [Transaction] -> [String]
-transToQif trans = qifHeader : (foo trans)
-    where   foo []     = []
-            foo (t:ts) = (toQif t) ++ ["^"] ++ (foo ts)
+transToQif trans =  qifToLines $ Qif{typeinfo = "Bank", transactions = trans }
+  
 
 -- | updates a Transaction if regex works
 updateTransaction :: String -> String -> Transaction -> Transaction
