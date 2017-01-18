@@ -1,5 +1,7 @@
 # CSV To Qif
 
+[![Build Status](https://travis-ci.org/mrVanDalo/csv-to-qif.svg?branch=master)](https://travis-ci.org/mrVanDalo/csv-to-qif)
+
 transform a wide range of csv files to qif files, with the main target to import them into [GnuCash](http://www.gnucash.org/).
 
 # Usage
