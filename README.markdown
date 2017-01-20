@@ -93,6 +93,14 @@ parsed with updater
 
 # Install
 
+
+## Package manager
+
+You can install it via package manager on the following Distributions : 
+
+* [Gentoo via Haskell Overlay](https://github.com/gentoo-haskell/gentoo-haskell)
+* [NixOS](https://nixos.org/)
+
 ## using Cabal
 
     $> cabal update
