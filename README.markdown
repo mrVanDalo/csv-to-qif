@@ -117,10 +117,11 @@ get the source
 
 install from source
 
-    $> cabal clean                      # just to be sure
-    $> cabal configure --enable-tests   # we want also the tests
-    $> cabal build                      # sure we want to build
-    $> cabal test && cabal install      # only install when tests are ok
+    $> cabal clean                                        # just to be sure
+    $> cabal configure --enable-tests                     # we want also the tests
+    $> cabal install --only-dependencies --enable-tests
+    $> cabal build                                        # sure we want to build
+    $> cabal test && cabal install                        # only install when tests are ok
 
 
 
