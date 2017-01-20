@@ -2,11 +2,13 @@
 
 [![Build Status](https://travis-ci.org/mrVanDalo/csv-to-qif.svg?branch=master)](https://travis-ci.org/mrVanDalo/csv-to-qif)
 
-transform a wide range of csv files to qif files, with the main target to import them into [GnuCash](http://www.gnucash.org/).
+transform a wide range of csv files to qif files, with 
+the main target to import them into [GnuCash](http://www.gnucash.org/).
 
 # Usage
 
-You have to give `csv-to-qif` a lot of parameters, so it's best to create a bash script for every type of csv your bank will give you.
+You have to give `csv-to-qif` a lot of parameters, so it's best 
+to create a bash script for every type of csv your bank will give you.
 
     #!/bin/bash
     
@@ -43,7 +45,8 @@ You have to give `csv-to-qif` a lot of parameters, so it's best to create a bash
 ### updater Parameter
 
 Because some banks create descriptions that are _to detailed_.
-You can create a updater configuration that will match for Strings and replaces the description (not the long description) with a replacement.
+You can create a updater configuration that will match for Strings
+and replaces the description (not the long description) with a replacement.
 The format is `match`<->`replacement`
 
 Example updater file.
@@ -58,7 +61,12 @@ A file with this content
 
 parsed without updater
 
-    $> csv-to-qif --input=foo.csv --output=foo.qif --date=0 --text=1,2 --longtext=1,2,3 --balance=3
+    $> csv-to-qif --input=foo.csv \
+                  --output=foo.qif \
+                  --date=0 \
+                  --text=1,2 \
+                  --longtext=1,2,3 \
+                  --balance=3
     $> cat foo.qif
 
     !Type:Bank
@@ -74,7 +82,13 @@ parsed without updater
     ^
 parsed with updater
 
-    $> csv-to-qif --input=foo.csv --output=foo-updated.qif --date=0 --text=1,2 --longtext=1,2,3 --balance=3 --updater=updater.conf
+    $> csv-to-qif --input=foo.csv \
+                  --output=foo-updated.qif \
+                  --date=0 \
+                  --text=1,2 \
+                  --longtext=1,2,3 \
+                  --balance=3 \
+                  --updater=updater.conf
     $> cat foo-updated.qif
 
     !Type:Bank
