@@ -5,7 +5,7 @@ build-type: Simple
 license: BSD3
 license-file: LICENSE.txt
 copyright: (c) Ingolf Wagner
-maintainer: Ingolf Wagner <palipalo9@googlemail.com>
+maintainer: Ingolf Wagner <csv-to-qif@ingolf-wagner.de>
 stability: stable
 homepage: http://mrvandalo.github.io/csv-to-qif/
 bug-reports: mailto:palipalo9@gmail.com
@@ -15,6 +15,17 @@ description: Binary to convert a wide range of csv files to qif files.
 category: Console, Text
 author: Ingolf Wagner
 data-dir: ""
+
+tested-With:         GHC == 7.10.1
+                   , GHC == 7.10.2
+                   , GHC == 7.10.3
+                   , GHC == 7.8.4
+                   , GHC == 7.8.3
+                   , GHC == 7.8.2
+                   , GHC == 7.8.1
+                   , GHC == 7.6.3
+                   , GHC == 7.6.2
+                   , GHC == 7.6.1
 
 source-repository head
     type: git
