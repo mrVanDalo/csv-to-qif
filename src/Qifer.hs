@@ -14,9 +14,9 @@
 
 module Qifer where
 
-import Data.List
-import Text.Regex.TDFA
-import QifData
+import           Data.List
+import           QifData
+import           Text.Regex.TDFA
 
 
 type CSV = [Row]
@@ -26,11 +26,12 @@ type Column = String
 
 type Position = Int
 
-data Rule = Rule { dateField :: Position
-                   , descField :: [Position]
-                   , textField :: [Position]
-                   , balanceField :: Position
-                 } deriving (Show)
+data Rule = Rule {
+    dateField    :: Position
+  , descField    :: [Position]
+  , textField    :: [Position]
+  , balanceField :: Position
+  } deriving (Show)
 
 highestPosition :: Rule -> Position
 highestPosition (Rule dF tF ltF bF) =
@@ -52,7 +53,7 @@ toTransactions rule (c:sv)
 
 transToQif :: [Transaction] -> [String]
 transToQif trans =  qifToLines $ Qif{typeinfo = "Bank", transactions = trans }
-  
+
 
 -- | updates a Transaction if regex works
 updateTransaction :: String -> String -> Transaction -> Transaction

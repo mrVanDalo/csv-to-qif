@@ -83,7 +83,7 @@ type_parser = do _ <- string "!Type:"
                  typeinfo <- manyTill (noneOf ['\n','\r']) newline_or_eof
                  return typeinfo
 
--- | Parser for a qif file  
+-- | Parser for a qif file
 qif_file_parser :: GenParser Char st Qif
 qif_file_parser = do typeinfo     <- type_parser
                      transactions <- transactions_parser
@@ -102,7 +102,7 @@ parse_qif_file filename = do contents <- readFile filename
     Helper functions
 *************************************************** -}
 -- | test out parser on string
-test_parser p s = parse p "(unknown)" s
+-- test_parser p s = parse p "(unknown)" s
 
 -- | parses newline but throws away '\n'
 newline_skip = do _ <- newline

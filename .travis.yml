@@ -43,11 +43,16 @@ matrix:
     - env: CABALVER=1.22 GHCVER=7.10.3
       compiler: ": #GHC 7.10.3"
       addons: {apt: {packages: [cabal-install-1.22,ghc-7.10.3], sources: [hvr-ghc]}}
+    - env: CABALVER=1.24 GHCVER=8.0.1
+      compiler: ": #GHC 8.0.1"
+      addons: {apt: {packages: [cabal-install-1.24,ghc-8.0.1], sources: [hvr-ghc]}}
+    - env: CABALVER=1.24 GHCVER=8.0.2
+      compiler: ": #GHC 8.0.2"
+      addons: {apt: {packages: [cabal-install-1.24,ghc-8.0.2], sources: [hvr-ghc]}}
 
 branches:
-    only:
-      - master
-      - develop
+  except:
+    - gh-pages
 
 before_install:
  - unset CC
@@ -97,6 +102,7 @@ script:
  - cabal build   # this builds all libraries and executables (including tests/benchmarks)
  - cabal test
  - cabal check
+ - cabal haddock # tests that documentation can be generated
  - cabal sdist   # tests that a source-distribution can be generated
 
 # Check that the resulting source distribution can be built & installed.

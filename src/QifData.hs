@@ -8,44 +8,41 @@
 -- Stability   :  unstable
 -- Portability :
 --
--- |
+--
 --
 -----------------------------------------------------------------------------
-
-
 module QifData where
 
-data Qif = Qif{ typeinfo :: String, transactions :: [Transaction]}
-    deriving (Eq, Show)
-
- 
+data Qif = Qif
+  { typeinfo     :: String
+  , transactions :: [Transaction]
+  } deriving (Eq, Show)
 
 typeinfoToString :: String -> String
-typeinfoToString typeinfo = "!Type:" ++ typeinfo
-
+typeinfoToString typevalue = "!Type:" ++ typevalue
 
 qifToLines :: Qif -> [String]
-qifToLines qif = (typeinfoToString tinfo) : (foo trans)
-    where tinfo      = typeinfo qif 
-          trans      = transactions qif
-          foo []     = []
-          foo (t:ts) = (toQif t) ++ ["^"] ++ (foo ts)
+qifToLines qif = typeinfoToString tinfo : foo trans
+  where
+    tinfo = typeinfo qif
+    trans = transactions qif
+    foo []     = []
+    foo (t:ts) = toQif t ++ ["^"] ++ foo ts
 
-qifToString = unlines . qifToLines 
+qifToString :: Qif -> String
+qifToString = unlines . qifToLines
 
-data Transaction = Transaction { date :: String
-                                , description :: String
-                                , text :: String
-                                , balance :: String
-                               } deriving (Eq,Show)
-
-map_on_balance f x = x{balance = f $ balance x}
-
+data Transaction = Transaction
+  { date        :: String
+  , description :: String
+  , text        :: String
+  , balance     :: String
+  } deriving (Eq, Show)
 
 toQif :: Transaction -> [String]
 toQif trans = ["P" ++ d, "T" ++ money, "D" ++ time, "M" ++ msg]
-    where   d     = (description trans)
-            money = (balance trans)
-            time  = (date trans)
-            msg   = (text trans)
-
+  where
+    d = description trans
+    money = balance trans
+    time = date trans
+    msg = text trans

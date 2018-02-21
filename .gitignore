@@ -1,11 +1,6 @@
 dist
 .idea
-src/main.hi
-src/main.hs
-src/main.o
-src/QifData.hi
-src/QifData.o
-src/Qifer.hi
-src/Qifer.o
-src/QifParser.hi
-src/QifParser.o
+src/*.hi
+src/*.o
+.cabal-sandbox
+cabal.sandbox.config
