@@ -27,43 +27,43 @@ data TransactionField
   | T String
 
 -- | Parser for date field in transaction
-date_parser :: GenParser Char st TransactionField
-date_parser = do
+dataParser :: GenParser Char st TransactionField
+dataParser = do
   _ <- string "D"
-  date <- manyTill (noneOf ['\n', '\r']) (newline_or_eof)
+  date <- manyTill (noneOf ['\n', '\r']) newLineOrEndofFile
   return $ D date
 
 -- | Parser for description field in transaction
-description_parser :: GenParser Char st TransactionField
-description_parser = do
+descriptionParser :: GenParser Char st TransactionField
+descriptionParser = do
   _ <- string "P"
-  description <- manyTill (noneOf ['\n', '\r']) newline_or_eof
+  description <- manyTill (noneOf ['\n', '\r']) newLineOrEndofFile
   return $ P description
 
 -- | Parser for text field in transaction
-text_parser :: GenParser Char st TransactionField
-text_parser = do
+textParser :: GenParser Char st TransactionField
+textParser = do
   _ <- string "M"
-  text <- manyTill (noneOf ['\n', '\r']) newline_or_eof
+  text <- manyTill (noneOf ['\n', '\r']) newLineOrEndofFile
   return $ M text
 
 -- | Parser for balance field in transaction
-balance_parser :: GenParser Char st TransactionField
-balance_parser = do
+balanceParser :: GenParser Char st TransactionField
+balanceParser = do
   _ <- string "T"
-  balance <- manyTill (noneOf ['\n', '\r']) newline_or_eof
+  balance <- manyTill (noneOf ['\n', '\r']) newLineOrEndofFile
   return $ T balance
 
 {- **************************************************
     transactions
 *************************************************** -}
 -- | Parser for one whole transaction
-transaction_parser :: GenParser Char st Transaction
-transaction_parser = do
+transactionParser :: GenParser Char st Transaction
+transactionParser = do
   fields <-
     manyTill
-      (choice [date_parser, description_parser, text_parser, balance_parser])
-      (try $ lookAhead $ seperator_parser)
+      (choice [dataParser, descriptionParser, textParser, balanceParser])
+      (try $ lookAhead $ seperatorParser)
   return $
     foldl
       fieldToTransaction
@@ -76,43 +76,37 @@ transaction_parser = do
     fieldToTransaction trans (T bal)  = trans {balance = bal}
 
 -- | Parser for transaction seperator '^'
-seperator_parser :: GenParser Char st ()
-seperator_parser = do
+seperatorParser :: GenParser Char st ()
+seperatorParser = do
   _ <- string "^"
-  _ <- newline_or_eof
+  _ <- newLineOrEndofFile
   return ()
 
 -- | Parser for a list of transactions
-transactions_parser :: GenParser Char st [Transaction]
-transactions_parser = sepEndBy transaction_parser seperator_parser
+transactionsParser :: GenParser Char st [Transaction]
+transactionsParser = sepEndBy transactionParser seperatorParser
 
 {- **************************************************
     Qif file
 *************************************************** -}
 -- | Parser for type of qif (Bank, CCard, etc.)
-type_parser :: GenParser Char st String
-type_parser = do
+typeParser :: GenParser Char st String
+typeParser = do
   _ <- string "!Type:"
-  typeinfo <- manyTill (noneOf ['\n', '\r']) newline_or_eof
+  typeinfo <- manyTill (noneOf ['\n', '\r']) newLineOrEndofFile
   return typeinfo
 
 -- | Parser for a qif file
-qif_file_parser :: GenParser Char st Qif
-qif_file_parser = do
-  typeinfo <- type_parser
-  transactions <- transactions_parser
+qifFileParser :: GenParser Char st Qif
+qifFileParser = do
+  typeinfo <- typeParser
+  transactions <- transactionsParser
   return Qif {typeinfo = typeinfo, transactions = transactions}
 
 -- | obtain qif from string
 qifFromString s =
   fromRight (Qif {typeinfo = "Bank", transactions = []}) $
-  parse qif_file_parser "(unknown)" s
-
--- | IO Monad helper function: reads and parses qif file
--- * if parsing successful returns qif data structure, otherwise returns "empty" qif
-parse_qif_file filename = do
-  contents <- readFile filename
-  return $ qifFromString contents
+  parse qifFileParser "(unknown)" s
 
 {- **************************************************
     Helper functions
@@ -120,12 +114,12 @@ parse_qif_file filename = do
 -- | test out parser on string
 -- test_parser p s = parse p "(unknown)" s
 -- | parses newline but throws away '\n'
-newline_skip = do
+newlineSkip = do
   _ <- newline
   return ()
 
 -- | skips newline but also succeeds at end-of-file
-newline_or_eof = choice [newline_skip, eof]
+newLineOrEndofFile = choice [newlineSkip, eof]
 
 -- | quick and dirty Either exception handling with default value
 fromRight d (Right x) = x
