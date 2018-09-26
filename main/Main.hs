@@ -38,28 +38,26 @@ main = do
     parseCSVFromFile (optSkip opts) (optInput opts) (optSeparator opts)
   case parseResult of
     Left error -> do
-      hPutStrLn stderr $ error
+      hPutStrLn stderr error
       exitFailure
     Right csv -> do
       let actions = toTransactions rules csv
       updatedActions <-
-        case (optUpdater opts) of
-          Nothing -> return $ actions
+        case optUpdater opts of
           Just file -> do
             updaterConfig <- readUpdaterFile file
             return $ update updaterConfig actions
+          Nothing -> return actions
       let qif = transToQif updatedActions
       withFile (optOutput opts) WriteMode (\h -> mapM_ (hPutStrLn h) qif)
 
 -- | reads updater file
 readUpdaterFile :: String -> IO [(String, String)]
-readUpdaterFile fileName = do
-  content <- readFile fileName
-  return $ tupler . onlyTuple . splitter . lines $ content
+readUpdaterFile fileName = tupler . onlyTuple . splitter . lines <$> readFile fileName
   where
-    tupler = map (\(x:(y:[])) -> (x, y))
+    tupler = map (\[x, y] -> (x, y))
     onlyTuple = filter (\l -> length l == 2)
-    splitter = map (\l -> splitOn "<->" l)
+    splitter = map (splitOn "<->")
 
 -- | this function is unsafe call it after checkArguments
 -- @todo : make me safer
@@ -74,7 +72,7 @@ rule opts =
 
 -- | checks input arguments for minimum of configuration
 checkArguments :: Options -> IO ()
-checkArguments opts = do
+checkArguments opts =
   case errors of
     [] -> return ()
     _ -> do
@@ -84,17 +82,17 @@ checkArguments opts = do
   where
     errors = catMaybes list
     list =
-      [ (check optDate "need date column")
-      , (check optBalance "need balance column")
-      , (checkL optText "need text columns")
-      , (checkL optLongText "need long text columns")
-      , (checkL optInput "need input file")
+      [ check optDate "need date column"
+      , check optBalance "need balance column"
+      , checkL optText "need text columns"
+      , checkL optLongText "need long text columns"
+      , checkL optInput "need input file"
       ]
     check getter text =
-      case (getter opts) of
+      case getter opts of
         Nothing -> Just text
         Just _  -> Nothing
     checkL getter text =
-      case (getter opts) of
+      case getter opts of
         [] -> Just text
         _  -> Nothing
