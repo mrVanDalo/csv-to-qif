@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------
 module QifParser where
 
-import           QifData
+import           QifData                       (Qif (..), Transaction (..))
 import           Text.ParserCombinators.Parsec (GenParser, choice, eof,
                                                 lookAhead, manyTill, newline,
                                                 noneOf, parse, sepEndBy, string,
