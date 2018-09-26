@@ -59,16 +59,14 @@ balanceParser = do
 *************************************************** -}
 -- | Parser for one whole transaction
 transactionParser :: GenParser Char st Transaction
-transactionParser = do
-  fields <-
-    manyTill
-      (choice [dataParser, descriptionParser, textParser, balanceParser])
-      (try $ lookAhead $ seperatorParser)
-  return $
-    foldl
-      fieldToTransaction
-      Transaction {date = "", description = "", text = "", balance = ""}
-      fields
+transactionParser =
+  foldl
+    fieldToTransaction
+    Transaction {date = "", description = "", text = "", balance = ""} <$>
+  manyTill
+    (choice [dataParser, descriptionParser, textParser, balanceParser])
+    (try $ lookAhead seperatorParser)
+
   where
     fieldToTransaction trans (D date) = trans {date = date}
     fieldToTransaction trans (P desc) = trans {description = desc}
