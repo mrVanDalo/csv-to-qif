@@ -93,8 +93,7 @@ transactionsParser = sepEndBy transactionParser seperatorParser
 typeParser :: GenParser Char st String
 typeParser = do
   _ <- string "!Type:"
-  typeinfo <- manyTill (noneOf ['\n', '\r']) newLineOrEndofFile
-  return typeinfo
+  manyTill (noneOf ['\n', '\r']) newLineOrEndofFile
 
 -- | Parser for a qif file
 qifFileParser :: GenParser Char st Qif
@@ -104,9 +103,9 @@ qifFileParser = do
   return Qif {typeinfo = typeinfo, transactions = transactions}
 
 -- | obtain qif from string
-qifFromString s =
-  fromRight (Qif {typeinfo = "Bank", transactions = []}) $
-  parse qifFileParser "(unknown)" s
+qifFromString string =
+  fromRight Qif{typeinfo = "Bank", transactions = []} $
+    parse qifFileParser "(unknown)" string
 
 {- **************************************************
     Helper functions
