@@ -53,9 +53,9 @@ main = do
 
 -- | reads updater file
 readUpdaterFile :: String -> IO [(String, String)]
-readUpdaterFile fileName = tupler . onlyTuple . splitter . lines <$> readFile fileName
+readUpdaterFile fileName = toTuple . onlyTuple . splitter . lines <$> readFile fileName
   where
-    tupler = map (\[x, y] -> (x, y))
+    toTuple = map (\[x, y] -> (x, y))
     onlyTuple = filter (\l -> length l == 2)
     splitter = map (splitOn "<->")
 
