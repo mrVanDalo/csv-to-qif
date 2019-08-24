@@ -5,3 +5,5 @@ src/*.hi
 src/*.o
 .cabal-sandbox
 cabal.sandbox.config
+.direnv
+.history
